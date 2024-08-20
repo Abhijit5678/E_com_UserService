@@ -1,12 +1,17 @@
 package com.example.demo.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Bean.Product;
 import com.example.demo.Entity.UserDetails;
 import com.example.demo.Services.UserServices;
 import com.example.demo.Utils.Response;
@@ -49,5 +54,17 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+	
+	@GetMapping("/{userId}")
+    public UserDetails getUserById(@PathVariable long userId) {
+        return userservices.getUserById(userId);
+    }
+	
+	@GetMapping("/{userId}/products")
+    public List<Product> getProductsByUserId(@PathVariable long userId) {
+        return userservices.getProductsByUserId(userId);
+    }
+	
+	
 
 }
