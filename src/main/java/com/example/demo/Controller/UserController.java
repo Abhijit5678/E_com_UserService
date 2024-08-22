@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class UserController {
 		result = userservices.saveuser(user);
 		if (!result.isBlank()) {
 			response.setMessage("Data Saved SuccessFully");
-			return ResponseEntity.ok(response);
+			return ResponseEntity.ok(HttpStatus.OK);
 		}
 
 		else {
@@ -61,10 +62,35 @@ public class UserController {
     }
 	
 	@GetMapping("/{userId}/products")
-    public List<Product> getProductsByUserId(@PathVariable long userId) {
-        return userservices.getProductsByUserId(userId);
+    public ResponseEntity<Response<?>> getProductsByUserId(@PathVariable long userId) {
+		Response<?> response = new Response<>();
+		
+		List<Product> productsByUserId = userservices.getProductsByUserId(userId);
+		if (!productsByUserId.isEmpty()) {
+			response.setData(response);
+			 return ResponseEntity.ok(response);
+		}
+		else {
+			response.setMessage("SomeThings Wents Wrong");
+			return ResponseEntity.internalServerError().body(response);
+		}
+		
+		
+		
+		
+		
+       
     }
+	@GetMapping("/{userId}/{product}/orders")
+	public ResponseEntity<Response<?>> getOrderDetails(@PathVariable long userId,@PathVariable  long productId)
 	
+	{
+		Response<?> response = new Response<>();
+		
+		
+		return null;
+		
+	}
 	
 
 }

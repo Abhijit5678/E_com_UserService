@@ -1,5 +1,6 @@
 package com.example.demo.Services;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -68,13 +69,26 @@ public class UserServicesImpl implements UserServices{
 	}
 	 public List<Product> getProductsByUserId(long userId) {
 	        String url = "http://localhost:8081/products/user/" + userId;
-	        ResponseEntity<List<Product>> response = restTemplate.exchange(
-	            url,
-	            HttpMethod.GET,
-	            null,
-	            new ParameterizedTypeReference<List<Product>>() {}
-	        );
-	        return response.getBody();
+	        
+	        try {
+	        	  ResponseEntity<List<Product>> response = restTemplate.exchange(
+	      	            url,
+	      	            HttpMethod.GET,
+	      	            null,
+	      	            new ParameterizedTypeReference<List<Product>>() {}
+	      	        );
+	        	  return response.getBody();
+			} catch (Exception e) {
+				 System.err.println("HTTP error occurred: " + e.getMessage());
+			        return Collections.emptyList();
+			}
+	      
+	        
+	       
+	        
+	        
+	        
+	       
 	    }
 	
 }
