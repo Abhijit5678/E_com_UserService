@@ -3,9 +3,11 @@ package com.example.demo.Services;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,21 @@ import org.springframework.web.client.RestTemplate;
 import com.example.demo.Bean.Product;
 import com.example.demo.Entity.UserDetails;
 import com.example.demo.Repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Service
 public class UserServicesImpl implements UserServices{
 	
+	
+	@Value("${product.service.url}")
+    private String productServiceUrl;
+	
 	@Autowired
 	private UserRepository userrepo;
+	
+	
 	
 	private final RestTemplate restTemplate;
 	
@@ -63,26 +73,25 @@ public class UserServicesImpl implements UserServices{
 
 	@Override
 	public UserDetails getUserById(long userId) {
-		UserDetails user=userrepo.getById(userId);
+		UserDetails user=userrepo.getUserByUserId1(userId);
 		
 		return user;
 	}
-	 public List<Product> getProductsByUserId(long userId) {
-	        String url = "http://localhost:8081/products/user/" + userId;
-	        
-	        try {
-	        	  ResponseEntity<List<Product>> response = restTemplate.exchange(
-	      	            url,
-	      	            HttpMethod.GET,
-	      	            null,
-	      	            new ParameterizedTypeReference<List<Product>>() {}
-	      	        );
-	        	  return response.getBody();
-			} catch (Exception e) {
-				 System.err.println("HTTP error occurred: " + e.getMessage());
-			        return Collections.emptyList();
-			}
-	      
+	public List<Product> getProductsByUserId(long userId) {
+        String url = "http://localhost:8081/product/user/" + userId;
+        
+        try {
+        	  ResponseEntity<List<Product>> response = restTemplate.exchange(
+      	            url,
+      	            HttpMethod.GET,
+      	            null,
+      	            new ParameterizedTypeReference<List<Product>>() {}
+      	        );
+        	  return response.getBody();
+		} catch (Exception e) {
+			 System.err.println("HTTP error occurred: " + e.getMessage());
+		        return Collections.emptyList();
+		}
 	        
 	       
 	        

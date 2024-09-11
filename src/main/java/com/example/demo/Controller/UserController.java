@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import com.example.demo.Services.UserServices;
 import com.example.demo.Utils.Response;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
 	@Autowired
@@ -61,13 +63,13 @@ public class UserController {
         return userservices.getUserById(userId);
     }
 	
-	@GetMapping("/{userId}/products")
+	@GetMapping("/products/{userId}")
     public ResponseEntity<Response<?>> getProductsByUserId(@PathVariable long userId) {
 		Response<?> response = new Response<>();
 		
 		List<Product> productsByUserId = userservices.getProductsByUserId(userId);
 		if (!productsByUserId.isEmpty()) {
-			response.setData(response);
+			response.setData(productsByUserId);
 			 return ResponseEntity.ok(response);
 		}
 		else {
